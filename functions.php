@@ -245,7 +245,7 @@ function Footer(){
     $setting = '<p>'.$setting.'</p>';
     echo $setting.'<p>&copy; '.date("Y").' <a href="'.Helper::options()->siteUrl.'">'.Helper::options()->title.'</a>｜Theme <a href="">Cuckoo</a> by <a href="https://dwd.moe/">Bhao</a>｜Powered By <a href="http://www.typecho.org">Typecho</a></p>'; 
   }else{
-    echo '<p>&copy; '.date("Y").' <a href="'.Helper::options()->siteUrl.'">'.Helper::options()->title.'</a><br><br>Theme <a href="">Cuckoo</a> by <a href="https://dwd.moe/">Bhao</a>｜Powered By <a href="http://www.typecho.org">Typecho</a></p>';
+    echo '<p>&copy; '.date("Y").' <a href="'.Helper::options()->siteUrl.'">'.Helper::options()->title.'</a> ｜ Theme <a href="">Cuckoo</a> by <a href="https://dwd.moe/">Bhao</a> ｜ Powered By <a href="http://www.typecho.org">Typecho</a></p>';
   }
 }
 

@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="<?php staticFiles('assets/css/cuckoo.min.css'); ?>">
   <link rel="stylesheet" href="<?php staticFiles('assets/css/nprogress.min.css'); ?>">
   <link rel="stylesheet" href="<?php staticFiles('assets/css/atom-one-dark.min.css'); ?>">
+  <link rel="stylesheet" href="//bilibili.css">
   <script src="<?php staticFiles('assets/js/nprogress.min.js') ?>"></script>
   <script src="<?php staticFiles('assets/js/tocbot.min.js') ?>"></script>
   <?php $this->header(); bgUrl(); ?>

@@ -27,7 +27,7 @@
   <link rel="stylesheet" href="<?php staticFiles('assets/css/cuckoo.min.css'); ?>">
   <link rel="stylesheet" href="<?php staticFiles('assets/css/nprogress.min.css'); ?>">
   <link rel="stylesheet" href="<?php staticFiles('assets/css/atom-one-dark.min.css'); ?>">
-  <link rel="stylesheet" href="//bilibili.css">
+  <link rel="stylesheet" href="/bilibili.css">
   <script src="<?php staticFiles('assets/js/nprogress.min.js') ?>"></script>
   <script src="<?php staticFiles('assets/js/tocbot.min.js') ?>"></script>
   <?php $this->header(); bgUrl(); ?>
@@ -39,7 +39,9 @@
       <a class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#menu', swipe: 'true', overlay: 'false'}">
         <i class="mdui-icon material-icons">menu</i>
       </a>
-      <a href="<?php Helper::options()->siteUrl() ?>" class="mdui-typo-title"><?php $this->options->title(); ?></a>
+      <a href="<?php Helper::options()->siteUrl() ?>" class="mdui-typo-title">
+          <?php $this->options->title(); ?>  - <?php $this->options->description(); ?>
+      </a>
       <div class="mdui-toolbar-spacer"></div>
       <div class="mdui-textfield mdui-textfield-expandable mdui-float-right">
         <button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></button>

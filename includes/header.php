@@ -44,7 +44,7 @@ $accentColor = $this->options->accentColor;
         <i class="mdui-icon material-icons">menu</i>
       </a>
       <a href="<?php Helper::options()->siteUrl() ?>" class="mdui-typo-title">
-          <?php $this->options->title(); ?>  - <?php $this->options->description(); ?>
+          <?php $this->options->title(); ?>
       </a>
       <div class="mdui-toolbar-spacer"></div>
       <div class="mdui-textfield mdui-textfield-expandable mdui-float-right">

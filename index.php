@@ -6,7 +6,7 @@
  *
  * @package Cuckoo
  * @author Bhao
- * @version 1.0.0
+ * @version 1.0.2
  * @link https://dwd.moe
  * @date 2020-02-02
  */
@@ -58,9 +58,7 @@ if ($sticky && $this->is('index') || $this->is('front')) {
             </div>
             <div class="mdui-card-content page-content"><?php $this->excerpt(70, ' ...'); ?></div>
             <div class="mdui-card-actions">
-              <a href="<?php $this->permalink() ?>"><button class="mdui-btn mdui-float-right">
-                  <font color="#E91E63">点击查看</font>
-                </button></a>
+              <a href="<?php $this->permalink() ?>"><button class="mdui-btn mdui-float-right mdui-text-color-theme">点击查看</button></a>
             </div>
           </div>
         <?php
@@ -72,9 +70,7 @@ if ($sticky && $this->is('index') || $this->is('front')) {
               <div class="mdui-card-primary-subtitle daily-subtitle"><?php $this->date(); ?>｜<?php $this->commentsNum('0 条评论', '1 条评论', '%d 条评论'); ?></div>
             </div>
             <div class="mdui-card-actions daily-button">
-              <a href="<?php $this->permalink() ?>"><button class="mdui-btn mdui-float-right">
-                  <font color="#E91E63">点击查看</font>
-                </button></a>
+              <a href="<?php $this->permalink() ?>"><button class="mdui-btn mdui-float-right mdui-text-color-theme">点击查看</button></a>
             </div>
           </div>
       <?php
@@ -84,11 +80,13 @@ if ($sticky && $this->is('index') || $this->is('front')) {
       <div class="changePage">
         <?php $this->pageLink('下一页', 'next'); ?>
       </div>
+<?php else : ?>
+    <div class="mdui-card page-card mdui-shadow-10">
+      <div class="archive-title">
+        <p>暂无文章</p>
+      </div>
+    </div>
+<?php endif; ?>
   </div>
-<?php
-    else : ?>
-  暂无文章
-<?php
-    endif; ?>
 </div>
 <?php $this->need('includes/footer.php'); ?>

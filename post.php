@@ -12,7 +12,7 @@
  * 
  * @author Bhao
  * @link https://dwd.moe/
- * @version 0.0.7(Beta)
+ * @version 1.0.2
  */
 
 $this->need('includes/header.php'); ?>
@@ -45,7 +45,7 @@ $this->need('includes/header.php'); ?>
         <?php echo parsePicture(parseBiaoQing($this->content)); ?>
       </div>
     </div>
-    <?php $this->need('includes/comments.php'); ?>
+    <?php if(!$this->hidden){$this->need('includes/comments.php');} ?>
   </div>
 </div>
 <?php $this->need('includes/footer.php'); ?>

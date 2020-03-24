@@ -11,7 +11,7 @@
  * 
  * @author Bhao
  * @link https://dwd.moe/
- * @version 1.0.0
+ * @version 1.0.2
  */
 
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
@@ -19,7 +19,7 @@ require_once("includes/setting.php");
 require_once("includes/owo.php");
 
 define("THEME_NAME", "Cuckoo");
-define("THEME_VERSION", "1.0.0");
+define("THEME_VERSION", "1.0.2");
 
 function themeFields($layout) { 
   /* 文章封面设置  */
@@ -48,12 +48,7 @@ function themeInit($archive){
     $qq = str_replace('@qq.com','',$email);
     $sjtx = 'mm';
     if(strstr($email,"qq.com") && is_numeric($qq) && strlen($qq) < 11 && strlen($qq) > 4) {
-      $geturl = 'http://ptlogin2.qq.com/getface?&imgtype=1&uin='.$qq;
-      $qquser = file_get_contents($geturl);
-      $str1 = explode('sdk&k=', $qquser);
-      $str2 = explode('&s=', $str1[1]);
-      $k = $str2[0];
-      $avatar = 'https://q1.qlogo.cn/g?b=qq&k='.$k.'&s=100';
+      $avatar = 'https://q1.qlogo.cn/g?b=qq&nk='.$qq.'&s=100';
     }else{
       $avatar = $host.$hash.'?d='.$sjtx;
     }
@@ -97,23 +92,27 @@ function get_comment_prefix($mail){
 function contact(){
   $setting = Helper::options()->drawerContact;
   $output = json_decode($setting, true);
-  foreach($output as $key => $value){
-    if($key == "qq"){
-      $website = "//wpa.qq.com/msgrd?uin=";
-    }elseif($key == "weibo"){
-      $website = "//weibo.com/";
-    }elseif($key == "bilibili"){
-      $website = "//space.bilibili.com/";
-    }elseif($key == "github"){
-      $website = "//github.com/";
-    }elseif($key == "twitter"){
-      $website = "//twitter.com/";
-    }elseif($key == "telegram"){
-      $website = "//t.me/";
-    }elseif($key == "email"){
-      $website = "mailto:";
+  if(is_array($output)){
+    foreach($output as $key => $value){
+      if($key == "qq"){
+        $website = "//wpa.qq.com/msgrd?uin=";
+      }elseif($key == "weibo"){
+        $website = "//weibo.com/";
+      }elseif($key == "bilibili"){
+        $website = "//space.bilibili.com/";
+      }elseif($key == "github"){
+        $website = "//github.com/";
+      }elseif($key == "twitter"){
+        $website = "//twitter.com/";
+      }elseif($key == "telegram"){
+        $website = "//t.me/";
+      }elseif($key == "email"){
+        $website = "mailto:";
+      }elseif($key == "netease-music"){
+        $website = "//music.163.com/#/user/home?id=";
+      }
+      print_r('<a target ="_blank" href="'.$website.$value.'"><button class="mdui-btn mdui-btn-icon mdui-ripple"><i class="iconfont icon-'.$key.'"></i></button></a>');
     }
-    print_r('<a target ="_blank" href="'.$website.$value.'"><button class="mdui-btn mdui-btn-icon mdui-ripple"><i class="iconfont icon-'.$key.'"></i></button></a>');
   }
 }
 
@@ -143,14 +142,14 @@ function bgUrl(){
   .page-img{background-image: url("<?php staticFiles('assets/images/loading.gif'); ?>");}
   .article-pic{background-image: url("<?php staticFiles('assets/images/loading.gif'); ?>");}</style><?php
   if(empty($setting) && empty($setting_phone)){
-    ?><style>.body{background-image: url("<?php staticFiles('assets/images/bg.png'); ?>");}</style><?php
+    ?><style>.background{background-image: url("<?php staticFiles('assets/images/bg.png'); ?>");}</style><?php
   }else{
     if(empty($setting_phone)){
-      echo "<style>.body{background-image: url('$setting');}@media(max-width: 900px){.body{background-image: url('$setting');}}</style>";
+      echo "<style>.background{background-image: url('$setting');}@media(max-width: 900px){.background{background-image: url('$setting');}}</style>";
     }elseif(empty($setting)){
-      echo "<style>.body{background-image: url('$setting_phone');}@media(max-width: 900px){.body{background-image: url('$setting_phone');}}</style>";
+      echo "<style>.background{background-image: url('$setting_phone');}@media(max-width: 900px){.background{background-image: url('$setting_phone');}}</style>";
     }else{
-      echo "<style>.body{background-image: url('$setting');}@media(max-width: 900px){.body{background-image: url('$setting_phone');}}</style>";
+      echo "<style>.background{background-image: url('$setting');}@media(max-width: 900px){.background{background-image: url('$setting_phone');}}</style>";
     }
   }
 }
@@ -201,7 +200,7 @@ function commentsReply($comment) {
 function randPic(){
   $setting = Helper::options()->randimg;
   $setting_cdn = Helper::options()->randimgCdn;
-  $rand = mt_rand(0,99);
+  $rand = mt_rand(0,999);
   if ($setting == 'api.ohmyga.cn') {
    $output = 'https://api.ohmyga.cn/wallpaper/?rand='.$rand;
   }elseif ($setting == 'local') {
@@ -210,7 +209,7 @@ function randPic(){
    preg_match('/\/random\/\S*\.(jpg|png|gif)/', $openfile[$img], $out);
    $output = Helper::options()->siteUrl.'usr/themes/Cuckoo'.$out[0];
   }elseif ($setting == 'cdn'){
-    $output = $setting_cdn.'/?rand='.$rand;
+    $output = preg_replace('{rand}', $rand, $setting_cdn);
   }
   print_r($output);
 }
@@ -222,6 +221,17 @@ function statisticsBaidu(){
   }
 }
 
+function getTheme() {
+  static $themeName = NULL;
+  if ($themeName === NULL) {
+   $db = Typecho_Db::get();
+   $query = $db->select('value')->from('table.options')->where('name = ?', 'theme');
+   $result = $db->fetchAll($query);
+   $themeName = $result[0]["value"];
+  }
+  return $themeName;
+}
+
 function otherPjax(){
   $setting = Helper::options()->otherPjax;
   $setting_baidu = Helper::options()->statisticsBaidu;
@@ -230,7 +240,7 @@ function otherPjax(){
     if(!empty($setting_baidu)){
       $output_baidu = "if(typeof _hmt !== 'undefined'){ _hmt.push(['_trackPageview', location.pathname + location.search]);}";
     }
-    echo "<script>function otherPjax() {".$output_baidu.$setting."}</script>";
+    echo $output_baidu.$setting;
   }
 }
 
@@ -241,7 +251,11 @@ function otherPjax(){
 */
 function Footer(){
   $setting = Helper::options()->Footer;
-  if(!empty($setting)){ 
+  $setting_beian = Helper::options()->beian;
+  if(!empty($setting_beian)){
+    $setting_beian = '｜<a href="//www.beian.miit.gov.cn">'.Helper::options()->beian.'</a>';
+  }
+  if(!empty($setting)){
     $setting = '<p>'.$setting.'</p>';
     echo $setting.'<p>&copy; '.date("Y").' <a href="'.Helper::options()->siteUrl.'">'.Helper::options()->title.'</a>｜Theme <a href="">Cuckoo</a> by <a href="https://dwd.moe/">Bhao</a>｜Powered By <a href="http://www.typecho.org">Typecho</a></p>'; 
   }else{
@@ -252,7 +266,6 @@ function Footer(){
 function describe(){
   $setting = Helper::options()->describe;
   if(empty($setting)){
-    echo "<script src='https://v1.hitokoto.cn/?encode=js&select=%23hitokoto' defer></script>";
     echo '<p id="hitokoto">:D 获取中...</p>';
   }else{
     echo '<p>'.$setting.'</p>';
@@ -280,7 +293,7 @@ function get_post_view($archive){
       $db->query($db->update('table.contents')->rows(array('views' => (int) $row['views'] + 1))->where('cid = ?', $cid));
       array_push($views, $cid);
       $views = implode(',', $views);
-      Typecho_Cookie::set('extend_contents_views', $views); //记录查看cookie
+      Typecho_Cookie::set('extend_contents_views', $views);
     }
   }
   echo $row['views'];
@@ -292,14 +305,9 @@ function get_comment_avatar($moe=NULL){
   $email = strtolower($moe);
   $qq = str_replace('@qq.com','',$email);
   if(strstr($email,"qq.com") && is_numeric($qq) && strlen($qq) < 11 && strlen($qq) > 4){
-   $geturl = 'http://ptlogin2.qq.com/getface?&imgtype=1&uin='.$qq;
-   $qquser = file_get_contents($geturl);
-   $str1 = explode('sdk&k=', $qquser);
-   $str2 = explode('&s=', $str1[1]);
-   $k = $str2[0];
-   $avatar = 'https://q1.qlogo.cn/g?b=qq&k='.$k.'&s=100';
+   $avatar = 'https://q1.qlogo.cn/g?b=qq&nk='.$qq.'&s=100';
   }else{
-   $avatar = $host.'/'.$hash.'?s=640';
+   $avatar = $host.'/'.$hash.'?s=100';
   }
   echo $avatar;
 }
@@ -447,16 +455,11 @@ function favicon(){
   }
 }
 
-function themeUpdate(){
-  $output = 'https://api.qwq.asia/typecho/theme/?s='.$_SERVER['HTTP_HOST'].'&v='.THEME_VERSION;
-  return $output;
-}
-
 function themeOptions($name) {
   static $themeOptions = NULL;
   if ($themeOptions === NULL) {
    $db = Typecho_Db::get();
-   $query = $db->select('value')->from('table.options')->where('name = ?', 'theme:Cuckoo');
+   $query = $db->select('value')->from('table.options')->where('name = ?', 'theme:'.getTheme());
    $result = $db->fetchAll($query);
    $themeOptions = unserialize($result[0]["value"]);
   }
@@ -474,7 +477,41 @@ function otherMenu(){
         <i class="mdui-icon material-icons mdui-list-item-icon">'.$i['icon'].'</i>
         <div class="mdui-list-item-content">'.$i['name'].'</div>
        </a>';
-      }elseif($i['type'] == '4'){
+      }elseif ($i['type'] == '1') {
+        echo '<li class="mdui-collapse-item">
+          <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+            <i class="mdui-icon material-icons mdui-list-item-icon">'.$i['icon'].'</i>
+            <div class="mdui-list-item-content">'.$i['name'].'</div>
+            <i class="mdui-icon material-icons mdui-list-item-icon mdui-collapse-item-arrow">keyboard_arrow_down</i>
+          </div>
+          <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">';
+          Typecho_Widget::widget('Widget_Contents_Post_Date', 'type=month&format=Y 年 m 月')->parse('<a href="{permalink}" class="mdui-list-item mdui-ripple" mdui-drawer-close><div class="mdui-list-item-content">{date}</div><div class="drawer-item">{count}</div></a>');
+        echo '</ul></li>';
+      }elseif ($i['type'] == '2') {
+        echo '<li class="mdui-collapse-item">
+           <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+            <i class="mdui-icon material-icons mdui-list-item-icon">'.$i['icon'].'</i>
+            <div class="mdui-list-item-content">'.$i['name'].'</div>
+            <i class="mdui-icon material-icons mdui-list-item-icon mdui-collapse-item-arrow">keyboard_arrow_down</i>
+           </div>
+           <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">';
+           Typecho_Widget::widget('Widget_Metas_Category_List')->parse('<a href="{permalink}" class="mdui-list-item mdui-ripple" mdui-drawer-close><div class="mdui-list-item-content">{name}</div><div class="drawer-item">{count}</div></a>');
+        echo '</ul>
+          </li>';
+      }elseif ($i['type'] == '3') {
+        Typecho_Widget::widget('Widget_Contents_Page_List')->to($pages);
+        echo '<li class="mdui-collapse-item">
+         <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+          <i class="mdui-icon material-icons mdui-list-item-icon">'.$i['icon'].'</i>
+          <div class="mdui-list-item-content">'.$i['name'].'</div>
+          <i class="mdui-icon material-icons mdui-list-item-icon mdui-collapse-item-arrow">keyboard_arrow_down</i>
+         </div>
+         <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">';
+         while($pages->next()){
+          echo '<a class="mdui-list-item mdui-ripple" href="'.$pages->permalink.'" mdui-drawer-close>'.$pages->title.'</a>';
+         }
+        echo '</ul></li>';
+       }elseif($i['type'] == '4'){
         echo ' <div class="mdui-collapse" mdui-collapse>
         <li class="mdui-collapse-item">
           <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
@@ -485,6 +522,13 @@ function otherMenu(){
           <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">';
           foreach($i['list'] as $ii){ echo '<a class="mdui-list-item mdui-ripple" href="'.$ii['link'].'" mdui-drawer-close>'.$ii['name'].'</a>';} 
         echo '</ul></li></div>';
+      }elseif ($i['type'] == '5') {
+        echo '<div class="mdui-divider"></div>';
+      }elseif ($i['type'] == '6') {
+      echo '<a href="'.Helper::options()->feedUrl.'" target="_blank" class="mdui-list-item mdui-ripple" mdui-drawer-close>
+         <i class="mdui-icon material-icons mdui-list-item-icon">rss_feed</i>
+         <div class="mdui-list-item-content">RSS订阅</div>
+        </a>';
       }
     }
   }

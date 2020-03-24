@@ -11,8 +11,11 @@
  * 
  * @author Bhao
  * @link https://dwd.moe/
- * @version 1.0.0
+ * @version 1.0.2
  */
+
+$primaryColor = $this->options->primaryColor;
+$accentColor = $this->options->accentColor;
 ?>
 <html>
 <head>
@@ -30,11 +33,12 @@
   <link rel="stylesheet" href="/bilibili.css">
   <script src="<?php staticFiles('assets/js/nprogress.min.js') ?>"></script>
   <script src="<?php staticFiles('assets/js/tocbot.min.js') ?>"></script>
-  <?php $this->header(); bgUrl(); ?>
+  <?php $this->header('commentReply='); bgUrl(); ?>
 </head>
 
-<body class="body" id="body">
-  <div class="mdui-appbar mdui-shadow-0">
+<body class="mdui-theme-primary-<?php echo $primaryColor; ?> mdui-theme-accent-<?php echo $accentColor; ?> mdui-appbar-with-toolbar " id="body">
+  <div class="background"></div>
+  <div class="mdui-appbar mdui-shadow-0 mdui-appbar-fixed mdui-appbar-scroll-hide">
     <div class="mdui-toolbar">
       <a class="mdui-btn mdui-btn-icon" mdui-drawer="{target: '#menu', swipe: 'true', overlay: 'false'}">
         <i class="mdui-icon material-icons">menu</i>
@@ -51,76 +55,21 @@
         </form>
         <button class="mdui-textfield-close mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">close</i></button>
       </div>
+      <button onclick="brightness();" id="brightness" class="mdui-textfield-close mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">brightness_5</i></button>
     </div>
   </div>
-  <div class="mdui-drawer mdui-drawer-close mdui-color-white" id="menu">
+  <div class="mdui-drawer mdui-drawer-close mdui-drawer-full-height" id="menu">
     <div class="drawer-img"><img class="mdui-img-circle" src="<?php logo(); ?>" /></div>
     <div class="drawer-contact">
       <?php contact(); ?>
     </div>
     <div class="mdui-divider"></div>
     <ul class="mdui-list" mdui-collapse="{accordion: true}">
-      <a href="/index.php">
+      <a no-go href="<?php Helper::options()->siteUrl() ?>">
         <li class="mdui-list-item mdui-ripple"><i class="mdui-list-item-icon mdui-icon material-icons">home</i>
           <div class="mdui-list-item-content">首页</div>
         </li>
       </a>
-      <div class="mdui-collapse" mdui-collapse>
-        <li class="mdui-collapse-item">
-          <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
-            <i class="mdui-list-item-icon mdui-icon material-icons">view_list</i>
-            <div class="mdui-list-item-content">分类</div>
-            <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
-          </div>
-          <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
-            <?php $this->widget('Widget_Metas_Category_List')->to($categories); ?>
-            <?php while ($categories->next()) : ?>
-              <a href="<?php $categories->permalink(); ?>" rel="section">
-                <li class="mdui-list-item mdui-ripple">
-                  <div class="mdui-list-item-content"><?php $categories->name(); ?></div>
-                  <div class="drawer-item"><?php $categories->count(); ?></div>
-                </li>
-              </a>
-            <?php endwhile; ?>
-          </ul>
-        </li>
-      </div>
-      <div class="mdui-collapse" mdui-collapse>
-        <li class="mdui-collapse-item">
-          <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
-            <i class="mdui-list-item-icon mdui-icon material-icons">access_time</i>
-            <div class="mdui-list-item-content">归档</div>
-            <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
-          </div>
-          <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
-            <?php $this->widget('Widget_Contents_Post_Date', 'type=month&format=Y 年 m 月')
-              ->parse('<a href="{permalink}"><li class="mdui-list-item mdui-ripple"><div class="mdui-list-item-content">{date}</div><div class="drawer-item">{count}</div></li></a>'); ?>
-          </ul>
-        </li>
-      </div>
-      <div class="mdui-collapse" mdui-collapse>
-        <li class="mdui-collapse-item">
-          <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
-            <i class="mdui-list-item-icon mdui-icon material-icons">view_carousel</i>
-            <div class="mdui-list-item-content">页面</div>
-            <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
-          </div>
-          <ul class="mdui-collapse-item-body mdui-list mdui-list-dense">
-            <?php Typecho_Widget::widget('Widget_Contents_Page_List')->to($pages);
-            while ($pages->next()) {
-              echo '<a href="' . $pages->permalink . '"><li class="mdui-list-item mdui-ripple"><div class="mdui-list-item-content">' . $pages->title . '</div></li></a>';
-            }
-            ?>
-          </ul>
-        </li>
-      </div>
       <?php otherMenu(); ?>
-      <div class="mdui-divider"></div>
-      <a href="<?php $this->options->feedUrl(); ?>">
-        <li class="mdui-list-item mdui-ripple">
-          <i class="mdui-list-item-icon mdui-icon material-icons">rss_feed</i>
-          <div class="mdui-list-item-content">RSS 订阅</div>
-        </li>
-      </a>
     </ul>
   </div>

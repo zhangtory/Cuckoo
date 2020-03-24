@@ -12,7 +12,7 @@
  * 
  * @author Bhao
  * @link https://dwd.moe/
- * @version 1.0.0
+ * @version 1.0.2
  */
 
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
@@ -36,28 +36,7 @@ class Cuckoo_Setting
     echo '<script src="' . staticFiles('assets/js/mdui.min.js', 1) . '"></script>' .
       '<link rel="stylesheet" href="' . staticFiles('assets/css/setting.min.css', 1) . '" />' .
       '<script src="' . staticFiles('assets/js/jquery.min.js', 1) . '"></script>' .
-      '<script>
-      mdui.JQ("body").addClass("mdui-theme-primary-pink");
-      $(function () {  
-        $.ajax({  
-          url: "' . themeUpdate() . '",  
-          type: "GET",
-          dataType: "json",     
-          beforeSend: function() {
-            $("#verison").html("正在获取新版本中...");
-            $("#notice").html("正在获取公告中...");
-          }, 
-          error: function() {
-            $("#verison").html("新版本获取出错");
-            $("#notice").html("公告获取出错"); 
-          },   
-          success: function(data) {
-            $("#verison").html(data.version);
-            $("#notice").html(data.notice);
-          }
-        })
-      });
-      </script>';
+      '<script src="' . staticFiles('assets/js/setting.min.js', 1) . '"></script>';
 
 
     $string = '<div class="backgroud"></div>
@@ -83,6 +62,7 @@ class Cuckoo_Setting
         </div>
       </div>
     </div>
+    <div id="data" data-update="'.base64_encode('theme='.THEME_NAME.'&site='.$_SERVER['HTTP_HOST'].'&version='.THEME_VERSION.'&token='.md5('cuckoo@'.THEME_VERSION)).'"></div>
     <div class="mdui-table-fluid">
       <table class="mdui-table">
         <tbody>
@@ -224,7 +204,7 @@ class Cuckoo_Setting
     if(array_key_exists($name, $plugins)){
       return '<p class="setting-normal">检测到您已经安装“'.$name.'”插件 请仔细填写好下面的内容哦～</p>';
     }else{
-      return '<p class="setting-error">检测到您还未安装“'.$name.'”插件 请 <a href="//www.imhan.com/archives/typecho_links_20141214">点击此处进行下载</a> 否则将无法正常运行友链功能</p>';
+      return '<p class="setting-error">检测到您还未安装“'.$name.'”插件 请 <a href="//www.imhan.com/archives/typecho_links_20141214/">点击此处进行下载</a> 否则将无法正常运行友链功能</p>';
     }
   }
 }

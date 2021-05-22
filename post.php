@@ -43,8 +43,9 @@ $this->need('includes/header.php'); ?>
         </div>
       <?php } ?>
       <div class="article-page mdui-typo">
-      <?php echo parsePicture(parseBiaoQing($this->content)); ?>
-	  
+          <div class="article-copy">
+              <?php echo $this->options->articleCopy ?>
+          </div>
       </div>
     </div>
     <?php if(!$this->hidden){$this->need('includes/comments.php');} ?>

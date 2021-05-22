@@ -274,10 +274,10 @@ function Footer(){
     $setting_beian = '｜<a href="//www.beian.miit.gov.cn">'.Helper::options()->beian.'</a>';
   }
   if(!empty($setting)){
-    $setting = '<p>'.$setting.'</p>';
-    echo $setting.'<p>&copy; '.date("Y").' <a href="'.Helper::options()->siteUrl.'">'.Helper::options()->title.'</a>｜Theme <a href="">Cuckoo</a> by <a href="https://dwd.moe/">Bhao</a>｜Powered By <a href="http://www.typecho.org">Typecho</a></p>'; 
+      $setting = '<p>'.$setting.'</p>';
+      echo $setting.'<p>&copy; '.date("Y").' <a href="'.Helper::options()->siteUrl.'">'.Helper::options()->title.'</a>'.$setting_beian.'<br><br><span id="cuckoo-copy">Theme <a href="https://github.com/bhaoo/cuckoo" target="_blank">Cuckoo</a> by <a href="https://dwd.moe/" target="_blank">Bhao</a>｜Powered By <a href="http://www.typecho.org" target="_blank">Typecho</a></span></p>';
   }else{
-    echo '<p>&copy; '.date("Y").' <a href="'.Helper::options()->siteUrl.'">'.Helper::options()->title.'</a> ｜ Theme <a href="">Cuckoo</a> by <a href="https://dwd.moe/">Bhao</a> ｜ Powered By <a href="http://www.typecho.org">Typecho</a></p>';
+      echo '<p>&copy; '.date("Y").' <a href="'.Helper::options()->siteUrl.'">'.Helper::options()->title.'</a>'.$setting_beian.'<span id="cuckoo-copy">｜Theme <a href="https://github.com/bhaoo/cuckoo" target="_blank">Cuckoo</a> by <a href="https://dwd.moe/" target="_blank">Bhao</a>｜Powered By <a href="http://www.typecho.org" target="_blank">Typecho</a></span></p>';
   }
 }
 

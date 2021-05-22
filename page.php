@@ -12,9 +12,10 @@
  * 
  * @author Bhao
  * @link https://dwd.moe/
- * @version 0.0.5(Beta)
+ * @version 1.0.5
  */
 
+if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 $this->need('includes/header.php'); ?>
 <div class="container">
   <?php $this->need('includes/sidebar.php'); ?>
@@ -23,7 +24,7 @@ $this->need('includes/header.php'); ?>
       <?php if ($this->fields->articleType == "daily") { ?>
         <div class="daily-media">
           <div class="daily-card-title"><?php $this->title() ?></div>
-          <div class="mdui-card-primary-subtitle daily-card-subtitle"><?php get_post_view($this) ?> 浏览 | <?php $this->date(); ?> | 分类：<?php $this->category(','); ?> | 标签：<?php $this->tags(','); ?></div>
+          <div class="mdui-card-primary-subtitle diary-subtitle"><?php get_post_view($this) ?> 浏览 | <?php $this->date(); ?> | 阅读时间: <?php readingTime($this->cid); ?> | 分类: <?php $this->category(','); ?> | 标签: <?php $this->tags(','); ?></div>
         </div>
       <?php } elseif ($this->fields->articleType == "article") { ?>
         <div class="mdui-card-media">
@@ -36,13 +37,14 @@ $this->need('includes/header.php'); ?>
           <div class="mdui-card-media-covered">
             <div class="mdui-card-primary">
               <div class="mdui-card-primary-title"><?php $this->title() ?></div>
-              <div class="mdui-card-primary-subtitle article-subtitle"><?php get_post_view($this) ?> 浏览 | <?php $this->date(); ?> | 分类：<?php $this->category(','); ?> | 标签：<?php $this->tags(','); ?></div>
+              <div class="mdui-card-primary-subtitle diary-subtitle"><?php get_post_view($this) ?> 浏览 | <?php $this->date(); ?> | 阅读时间: <?php readingTime($this->cid); ?> | 分类: <?php $this->category(','); ?> | 标签: <?php $this->tags(','); ?></div>
             </div>
           </div>
         </div>
       <?php } ?>
       <div class="article-page mdui-typo">
-        <?php echo parsePicture(parseBiaoQing($this->content)); ?>
+      <?php echo parsePicture(parseBiaoQing($this->content)); ?>
+
       </div>
     </div>
     <?php $this->need('includes/comments.php'); ?>

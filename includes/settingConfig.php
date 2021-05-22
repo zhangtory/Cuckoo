@@ -12,7 +12,7 @@
  * 
  * @author Bhao
  * @link https://dwd.moe/
- * @version 1.0.2
+ * @version 1.0.5
  */
 
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
@@ -32,11 +32,11 @@ class Cuckoo_Setting
 
   public function themePanel()
   {
-    echo '<link rel="stylesheet" href="' . staticFiles('assets/css/mdui.min.css', 1) . '" />';
-    echo '<script src="' . staticFiles('assets/js/mdui.min.js', 1) . '"></script>' .
-      '<link rel="stylesheet" href="' . staticFiles('assets/css/setting.min.css', 1) . '" />' .
-      '<script src="' . staticFiles('assets/js/jquery.min.js', 1) . '"></script>' .
-      '<script src="' . staticFiles('assets/js/setting.min.js', 1) . '"></script>';
+    echo '<link rel="stylesheet" href="' . staticFiles('css/mdui.min.css', 1) . '" />';
+    echo '<script src="' . staticFiles('js/mdui.min.js', 1) . '"></script>' .
+      '<link rel="stylesheet" href="' . staticFiles('css/setting.min.css', 1) . '" />' .
+      '<script src="' . staticFiles('js/jquery.min.js', 1) . '"></script>' .
+      '<script src="' . staticFiles('js/setting.min.js', 1) . '"></script>';
 
 
     $string = '<div class="backgroud"></div>
@@ -45,6 +45,7 @@ class Cuckoo_Setting
       <a class="mdui-btn mdui-btn-icon" mdui-drawer="{target: \'#drawer\', swipe: \'true\', overlay: \'false\'}"><i class="mdui-icon material-icons">menu</i></a>
       <a class="mdui-typo-title">Cuckoo</a>
       <div class="mdui-toolbar-spacer"></div>
+      <a href="//cuckoo.owo.show"><button class="mdui-btn">主题文档</button></a>
       <a href="' . Helper::options()->adminUrl . 'themes.php"><button class="mdui-btn">主题列表</button></a>
       <a href="' . Helper::options()->adminUrl . 'theme-editor.php"><button class="mdui-btn">编辑主题</button></a>
     </div>
@@ -82,9 +83,9 @@ class Cuckoo_Setting
             <td>功能</td>
             <td>
               <form class="protected" action="?CuckooBackup" method="post" style="display: block!important">
-                <button class="mdui-btn mdui-btn-raised mdui-color-pink setting-button" type="submit" name="type" value="备份模板数据">备份数据</button>
-                <button class="mdui-btn mdui-btn-raised mdui-color-pink setting-button" type="submit" name="type" value="还原模板数据">还原数据</button>
-                <button class="mdui-btn mdui-btn-raised mdui-color-pink setting-button" type="submit" name="type" value="删除备份数据">删除备份</button>
+                <input class="mdui-btn mdui-btn-raised mdui-color-pink setting-button" type="submit" name="type" value="备份数据"></input>
+                <input class="mdui-btn mdui-btn-raised mdui-color-pink setting-button" type="submit" name="type" value="还原数据"></input>
+                <input class="mdui-btn mdui-btn-raised mdui-color-pink setting-button" type="submit" name="type" value="删除备份"></input>
               </form>
             </td>
         </tr>
@@ -171,14 +172,19 @@ class Cuckoo_Setting
   public function checkbox($name, $display = NULL, $description = NULL, $options, $default = NULL)
   {
     $string = "";
+    $description = ($description) ? '<div class="mdui-textfield-helper">' . $description . '</div>' : NULL;
     $userOptions = themeOptions($name);
-    $string .= '<ul style="list-style: none!important;padding:0">';
+    $string .= '<div class="mdui-textfield">';
+    $string .= '<label class="mdui-textfield-label">' . $display . '</label>';
+    $string .= '</div>';
     foreach ($options as $option => $value) {
       $checked = "";
       if ($userOptions !== null && in_array($option, $userOptions)) $checked = "checked";
-      $string .= '<li><label class="mdui-checkbox"><input type="checkbox" name="' . $name . '[]" value="' . $option . '" ' . $checked . '/><i class="mdui-checkbox-icon"></i>' . $value . '</label></li>';
+      $string .= '<label style="margin-bottom:10px" class="mdui-switch"><input type="checkbox" name="' . $name . '[]" value="' . $option . '" ' . $checked . '/><i class="mdui-switch-icon"></i></label>';
     }
-    $string .= "</ul>";
+    $string .= '<div class="mdui-textfield">';
+    $string .= $description;
+    $string .= '</div>';
     $$name = new Typecho_Widget_Helper_Form_Element_Checkbox($name, $options, $default, _t($display), _t($description));
     $this->form->addInput($$name->multiMode());
     return $string;
@@ -204,7 +210,7 @@ class Cuckoo_Setting
     if(array_key_exists($name, $plugins)){
       return '<p class="setting-normal">检测到您已经安装“'.$name.'”插件 请仔细填写好下面的内容哦～</p>';
     }else{
-      return '<p class="setting-error">检测到您还未安装“'.$name.'”插件 请 <a href="//www.imhan.com/archives/typecho_links_20141214/">点击此处进行下载</a> 否则将无法正常运行友链功能</p>';
+      return '<p class="setting-error">检测到您还未安装“'.$name.'”插件，请安装该插件，否则将无法正常运行其功能</p>';
     }
   }
 }

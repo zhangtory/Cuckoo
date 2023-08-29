@@ -19,7 +19,7 @@ if(!defined('__TYPECHO_ROOT_DIR__'))
   exit;
 ?>
 <div class="mdui-col-md-4">
-  <div class="mdui-card mdui-hoverable sidebar-info">
+  <div class="mdui-card mdui-hoverable sidebar-info" style="position: fixed; width: 16%;">
     <div class="sidebar-info-img">
       <div class="sidebar-info-bg"
            style="background-image: url('<?php setting("sidebarBg", "images/sidebar.jpg"); ?>')"></div>
